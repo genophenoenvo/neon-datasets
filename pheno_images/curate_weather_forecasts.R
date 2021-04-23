@@ -7,7 +7,7 @@ library(dplyr)
 
 ###########Download weather data###########
 pheno_sites <- c("HARV", "BART", "SCBI", "STEI", "UKFS", "GRSM", "DELA", "CLBJ")
-download_noaa(pheno_sites)
+download_noaa(siteID = pheno_sites, interval = "1hr")
 noaa_fc <- stack_noaa()
 
 ###########Clean up weather data###########
