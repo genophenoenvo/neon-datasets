@@ -11,7 +11,7 @@ source("~/neon4cast/R/noaa.R")
 
 ###########Download weather data###########
 pheno_sites <- c("HARV", "BART", "SCBI", "STEI", "UKFS", "GRSM", "DELA", "CLBJ")
-download_noaa(siteID = pheno_sites, interval = "1hr")
+download_noaa(siteID = pheno_sites, interval = "1hr", date = Sys.Date() - 1)
 noaa_fc <- stack_noaa()
 
 ###########Clean up weather data###########
@@ -25,14 +25,15 @@ hourly <- noaa_fc %>%
   summarize(radiation = mean(surface_downwelling_shortwave_flux_in_air),
             airtemp_C = mean(airtemp_C),
             precip = mean(precip),
-            vpd = mean(vpd)) %>%
+            vpd = mean(vpd),
+            rad_Mj_hr = ud.convert(radiation*60*60, "joule", "megajoule")) %>%
   ungroup() %>%
   mutate(date = as.Date(substr(time, 1, 19)))
 
 # Then, summarize to daily. Note that precipitation is cumulative, so take max rather than sum
 daily <- hourly %>%
   group_by(siteID, date) %>%
-  summarize(radiation = sum(radiation),
+  summarize(radiation = sum(rad_Mj_hr),
             max_temp = max(airtemp_C),
             min_temp = min(airtemp_C),
             precip = max(precip),
@@ -40,4 +41,4 @@ daily <- hourly %>%
   ungroup()
 
 ###########Save weather csv###########
-write_csv(daily, file = paste0('NOAA_forecasts/NOAA_GEFS_35d_', Sys.Date(), '.csv'))
+write_csv(daily, file = paste0('NOAA_forecasts/NOAA_GEFS_35d_', Sys.Date() - 1, '.csv'))
