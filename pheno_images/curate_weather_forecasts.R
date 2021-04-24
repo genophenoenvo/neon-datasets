@@ -22,10 +22,10 @@ hourly <- noaa_fc %>%
          precip = ud.convert(precipitation_flux, "s^-1", "d^-1"),
          vpd = RHtoVPD(RH = relative_humidity, TdegC = airtemp_C)) %>%
   group_by(siteID, time) %>%
-  summarize(radiation = mean(surface_downwelling_shortwave_flux_in_air),
-            airtemp_C = mean(airtemp_C),
-            precip = mean(precip),
-            vpd = mean(vpd),
+  summarize(radiation = median(surface_downwelling_shortwave_flux_in_air),
+            airtemp_C = median(airtemp_C),
+            precip = median(precip),
+            vpd = median(vpd),
             rad_Mj_hr = ud.convert(radiation*60*60, "joule", "megajoule")) %>%
   ungroup() %>%
   mutate(date = as.Date(substr(time, 1, 19)))
