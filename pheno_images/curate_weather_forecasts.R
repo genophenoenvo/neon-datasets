@@ -1,9 +1,13 @@
 ###########Read in libraries###########
 # devtools::install_github('eco4cast/neon4cast')
 # install.packages('readr')
-library(neon4cast)
+# install.packages('tidync')
+# library(neon4cast)
 library(readr)
 library(dplyr)
+library(udunits2)
+library(plantecophys)
+source("~/neon4cast/R/noaa.R")
 
 ###########Download weather data###########
 pheno_sites <- c("HARV", "BART", "SCBI", "STEI", "UKFS", "GRSM", "DELA", "CLBJ")
@@ -11,8 +15,29 @@ download_noaa(siteID = pheno_sites, interval = "1hr")
 noaa_fc <- stack_noaa()
 
 ###########Clean up weather data###########
-forecast_weather <- noaa_fc %>% 
-  mutate(date_time = as.Date(substr(startDate, 1, 10)) + lubridate::hours(time))
+# First, convert units and take mean of 31 ensembles
+hourly <- noaa_fc %>% 
+  tidyr::drop_na() %>% # the 36th day has NAs, exclude
+  mutate(airtemp_C = ud.convert(air_temperature, "kelvin", "celsius"),
+         precip = ud.convert(precipitation_flux, "s^-1", "d^-1"),
+         vpd = RHtoVPD(RH = relative_humidity, TdegC = airtemp_C)) %>%
+  group_by(siteID, time) %>%
+  summarize(radiation = mean(surface_downwelling_shortwave_flux_in_air),
+            airtemp_C = mean(airtemp_C),
+            precip = mean(precip),
+            vpd = mean(vpd)) %>%
+  ungroup() %>%
+  mutate(date = as.Date(substr(time, 1, 19)))
+
+# Then, summarize to daily. Note that precipitation is cumulative, so take max rather than sum
+daily <- hourly %>%
+  group_by(siteID, date) %>%
+  summarize(radiation = sum(radiation),
+            max_temp = max(airtemp_C),
+            min_temp = min(airtemp_C),
+            precip = max(precip),
+            vpd = mean(vpd)) %>%
+  ungroup()
 
 ###########Save weather csv###########
-write_csv(forecast_weather, file = paste0('pheno_images/NOAA_GEFS_35d_', Sys.Date(), '.csv'))
+write_csv(daily, file = paste0('NOAA_forecasts/NOAA_GEFS_35d_', Sys.Date(), '.csv'))
