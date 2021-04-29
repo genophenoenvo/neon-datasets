@@ -1,6 +1,6 @@
 # Harmonizing Daymet and NOAA weather variables
 
-For weather variables to be used in forecasting, past and projected data must be harmonized to the same time scale and units. Daymet data is reported daily, while NOAA weather forecasts were retrieved hourly and summarized to the daily scale. Unfortunately, VPD could not be calculated from the Daymet variables due to non-linearity between air temperature and saturated vapor pressure. 
+For weather variables to be used in forecasting at eight NEON sites, past and projected weather data must be harmonized to the same time scale and units. Daymet data is reported daily, while NOAA weather forecasts were retrieved as hourly for 31 ensembles. NOAA data was first summarized as the hourly median across the ensembles and then as the sum, max, min, or mean to the daily scale. Unfortunately, VPD could not be calculated from the Daymet variables due to non-linearity between air temperature and saturated vapor pressure, and so is only available for the NOAA forecasts. 
 
 | Variable | Units  |  Daymet name | Daymet process   | NOAA name  | NOAA process  |
 |---|---|---|---|---|---|
