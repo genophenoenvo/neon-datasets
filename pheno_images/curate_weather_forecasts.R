@@ -15,11 +15,11 @@ download_noaa(siteID = pheno_sites, interval = "1hr", date = Sys.Date() - 1)
 noaa_fc <- stack_noaa()
 
 ###########Clean up weather data###########
-# First, convert units and take mean of 31 ensembles
+# First, convert units and take median of 31 ensembles
 hourly <- noaa_fc %>% 
   tidyr::drop_na() %>% # the 36th day has NAs, exclude
   mutate(airtemp_C = ud.convert(air_temperature, "kelvin", "celsius"),
-         precip = ud.convert(precipitation_flux, "s^-1", "d^-1"),
+         precip = ud.convert(precipitation_flux, "s^-1", "d^-1"), #kg per m2 is equivalent to mm
          vpd = RHtoVPD(RH = relative_humidity, TdegC = airtemp_C)) %>%
   group_by(siteID, time) %>%
   summarize(radiation = median(surface_downwelling_shortwave_flux_in_air),
