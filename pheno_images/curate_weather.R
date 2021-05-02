@@ -31,15 +31,12 @@ clean_daymet <- all_daymet %>%
   mutate(origin_year = year - 1, 
          origin_date = paste0(origin_year, "-12-31"), 
          date = as.Date(yday, origin = origin_date)) %>% 
-  select(-year, -yday, -origin_year, -origin_date) %>%
   rename(siteID = site,
          max_temp = tmax..deg.c.,
          min_temp = tmin..deg.c.,
          precip = prcp..mm.day.) %>%
   relocate(siteID, date) %>%
   mutate(radiation = ud.convert(dayl..s.*srad..W.m.2., "joule", "megajoule")) %>%
-         # SVP = esat(max_temp),
-         # vpd = ud.convert(SVP - vp..Pa., "Pa", "kPa"))
   select(siteID, date, radiation, max_temp, min_temp, precip) %>%
   arrange(siteID)
 
@@ -48,17 +45,10 @@ write.csv(clean_daymet, file = "Daymet_weather.csv", row.names = F)
 
 
 ###########Join weather data to GCC data###########
-pheno_images <- read.csv("pheno_images/targets_gcc.csv") %>% 
+pheno_images <- read.csv("targets_gcc.csv") %>% 
   mutate(time = as.Date(time))
 
 gcc_weather <- left_join(pheno_images, clean_daymet, 
-                         by = c("siteID" = "site", "time" = "date")) %>% 
-  rename(daylength = dayl..s., 
-         precipitation = prcp..mm.day., 
-         radiation = srad..W.m.2., 
-         snow_water_equiv = swe..kg.m.2., 
-         max_temp = tmax..deg.c., 
-         min_temp = tmin..deg.c., 
-         vapor_pressure = vp..Pa.)
+                         by = c("siteID" = "siteID", "time" = "date"))
 
-write.csv(gcc_weather, "pheno_images/gcc_weather.csv", row.names = FALSE)
+write.csv(gcc_weather, "gcc_weather.csv", row.names = FALSE)
