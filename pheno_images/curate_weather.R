@@ -45,10 +45,10 @@ write.csv(clean_daymet, file = "Daymet_weather.csv", row.names = F)
 
 
 ###########Join weather data to GCC data###########
-pheno_images <- read.csv("targets_gcc.csv") %>% 
+pheno_images <- read.csv("pheno_images/targets_gcc.csv") %>% 
   mutate(time = as.Date(time))
 
 gcc_weather <- left_join(pheno_images, clean_daymet, 
                          by = c("siteID" = "siteID", "time" = "date"))
 
-write.csv(gcc_weather, "gcc_weather.csv", row.names = FALSE)
+write.csv(gcc_weather, "pheno_images/gcc_weather.csv", row.names = FALSE)

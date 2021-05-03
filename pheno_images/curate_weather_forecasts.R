@@ -43,4 +43,8 @@ daily <- hourly %>%
   ungroup()
 
 ###########Save weather csv###########
-write_csv(daily, file = paste0('NOAA_forecasts/NOAA_GEFS_35d_', Sys.Date() - 1, '.csv'))
+if(!dir.exists('pheno_images/NOAA_forecasts')){
+  dir.create('pheno_images/NOAA_forecasts')
+}
+
+write_csv(daily, file = paste0('pheno_images/NOAA_forecasts/NOAA_GEFS_35d_', Sys.Date() - 1, '.csv'))
