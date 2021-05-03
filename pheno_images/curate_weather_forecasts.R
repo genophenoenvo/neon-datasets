@@ -28,7 +28,7 @@ hourly <- noaa_fc %>%
             vpd = median(vpd),
             rad_Mj_hr = ud.convert(radiation*60*60, "joule", "megajoule")) %>%
   ungroup() %>%
-  mutate(date = as.Date(substr(time, 1, 19)))
+  mutate(date = as.Date(time))
 
 # Then, summarize to daily. Note that precipitation is cumulative, so take max rather than sum
 daily <- hourly %>%
