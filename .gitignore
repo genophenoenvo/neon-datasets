@@ -6,3 +6,6 @@
 
 #Ignore csv files in the inputs folder
 models/RFR/inputs/*.csv
+
+#Ignore csv files in the inputs folder
+pheno_images/NOAA_forecasts/*.csv

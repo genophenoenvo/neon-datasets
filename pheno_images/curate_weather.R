@@ -1,12 +1,14 @@
 ###########Read in libraries###########
 library(daymetr)
 library(dplyr)
+library(udunits2)
+library(plantecophys)
 
 ###########Download weather data###########
 download.file("https://www.neonscience.org/sites/default/files/NEON_Field_Site_Metadata_20201204.csv", 
-              "pheno_images/neon_sites.csv")
+              "neon_sites.csv")
 
-efi_sites <- read.csv("pheno_images/neon_sites.csv") %>% 
+efi_sites <- read.csv("neon_sites.csv") %>% 
   select(field_site_id, field_latitude, field_longitude) %>% 
   filter(field_site_id %in% c("HARV", "BART", "SCBI", "STEI", "UKFS", "GRSM", "DELA", "CLBJ"))
 
@@ -24,24 +26,29 @@ for(site in 1:nrow(efi_sites)){
 }
 
 ###########Clean up weather data###########
+#To calculate daily total shortwaves, multiply srad by daylength and convert to Megajoules m^-2 d^-1
 clean_daymet <- all_daymet %>% 
   mutate(origin_year = year - 1, 
          origin_date = paste0(origin_year, "-12-31"), 
          date = as.Date(yday, origin = origin_date)) %>% 
-  select(-year, -yday, -origin_year, -origin_date)
+  rename(siteID = site,
+         max_temp = tmax..deg.c.,
+         min_temp = tmin..deg.c.,
+         precip = prcp..mm.day.) %>%
+  relocate(siteID, date) %>%
+  mutate(radiation = ud.convert(dayl..s.*srad..W.m.2., "joule", "megajoule")) %>%
+  select(siteID, date, radiation, max_temp, min_temp, precip) %>%
+  arrange(siteID)
+
+#### Write out only weather data file ####
+write.csv(clean_daymet, file = "Daymet_weather.csv", row.names = F)
+
 
 ###########Join weather data to GCC data###########
 pheno_images <- read.csv("pheno_images/targets_gcc.csv") %>% 
   mutate(time = as.Date(time))
 
 gcc_weather <- left_join(pheno_images, clean_daymet, 
-                         by = c("siteID" = "site", "time" = "date")) %>% 
-  rename(daylength = dayl..s., 
-         precipitation = prcp..mm.day., 
-         radiation = srad..W.m.2., 
-         snow_water_equiv = swe..kg.m.2., 
-         max_temp = tmax..deg.c., 
-         min_temp = tmin..deg.c., 
-         vapor_pressure = vp..Pa.)
+                         by = c("siteID" = "siteID", "time" = "date"))
 
 write.csv(gcc_weather, "pheno_images/gcc_weather.csv", row.names = FALSE)
