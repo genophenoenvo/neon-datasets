@@ -2,7 +2,9 @@
 # devtools::install_github('eco4cast/neon4cast')
 # install.packages('readr')
 # install.packages('tidync')
-# library(neon4cast)
+# library(neon4cast) <- does not currently work, so clone the repo and source the noaa.R function
+# If the version of noaa.R has changed and breaks the script, 
+# Run git reset --hard 223672814042e652384a89b82d87b040c4763d78 to access the correct version
 library(readr)
 library(dplyr)
 library(udunits2)
