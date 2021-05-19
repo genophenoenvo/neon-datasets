@@ -5,7 +5,7 @@ library(tidyr)
 library(dplyr)
 
 # loop to read, clean, score, validate, and submit prediction
-version <- c("PEG_RFR", "PEG_RFR0")
+version <- c("PEG_RFR", "PEG_RFR0", "PEG_RFR2")
 for(v in version){
   # Read in latest date
   out <- list.files(path = paste0("./", v, "/outputs/"))
