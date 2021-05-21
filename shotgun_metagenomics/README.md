@@ -1,19 +1,21 @@
 # Contents
 ```
-📦shotgun_metagenomics
- ┣ 📂neon_sg_metadata
- ┃ ┣ 📜categoricalCodes_10107.csv
- ┃ ┣ 📜mms_metagenomeDnaExtraction.csv
- ┃ ┣ 📜mms_metagenomeSequencing.csv
- ┃ ┣ 📜mms_rawDataFiles.csv
- ┃ ┣ 📜neon_sg_sequencing_metadata.R
- ┃ ┣ 📜readme_10107.csv
- ┃ ┣ 📜validation_10107.csv
- ┃ ┗ 📜variables.csv
- ┣ 📜README.md
- ┗ 📜neon-anvio-config.snake
+shotgun_metagenomics
+ ┣ neon_sg_metadata
+ ┃ ┣ categoricalCodes_10107.csv
+ ┃ ┣ mms_metagenomeDnaExtraction.csv
+ ┃ ┣ mms_metagenomeSequencing.csv
+ ┃ ┣ mms_rawDataFiles.csv
+ ┃ ┣ neon_sg_sequencing_metadata.R
+ ┃ ┣ readme_10107.csv
+ ┃ ┣ validation_10107.csv
+ ┃ ┗ variables.csv
+ ┣ README.md
+ ┗ neon-anvio-config.snake
 ```
+The contents of the directory `/neon_sg_metadata` allow a user to download the shotgun metagenome data from NEON over a defined time period. The directory also includes the associated metadata files for the NEON API.
 
+These FASTQ files are QA/QC'd with illumina-utils, and the file `neon-anvio-config.snake` contains the instructions for the anvi'o snakemake shotgun metagenomics workflow.
 
 # NEON Shotgun Metagenome Data Processing
 
