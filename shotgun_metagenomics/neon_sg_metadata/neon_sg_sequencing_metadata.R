@@ -15,7 +15,7 @@ library(gridExtra)
 
 # Soil Shotgun Metagenome Sequences: DP1.10107.001
 #relative path to this folder
-metadata__file_path <- "~/neon_sg_metadata/"
+metadata__file_path <- "~/neon-datasets/shotgun_metagenomics/neon_sg_metadata/"
 
 #list all the csv files (NEON Metadata)
 data_path <- list.files(path = metadata__file_path,
@@ -30,13 +30,6 @@ raw_metadata <- lapply(data_path, FUN = function(i){
 names(raw_metadata) <- filenames
 colnames(raw_metadata$mms_metagenomeDnaExtraction.csv)
 
-
-# filter out Argonne National Lab Sequences
-neon_only <- vector(mode = "list", length = 6)
-for(i in 1:length(neon_marker_genes)){
-  neon_marker_genes[[i]] <- processed_marker_genes[[i]][processed_marker_genes[[i]]$laboratoryName != "Argonne National Laboratory",]
-}
-names(neon_marker_genes) <- names(processed_marker_genes)
 
 # function to take a column and return counts table of unique categorical variables 
 # for Exploratory Data Analysis (EDA)
@@ -103,7 +96,12 @@ rawDataFiles <- raw_metadata$mms_rawDataFiles.csv %>%
          is.na(dataQF))
 # sanity check: unique tarballs of sequencing data:
 # print(n2tab_count(rawDataFiles$rawDataFileName))
-
+if(!dir.exists(paste0(outDir, '00_RAW_FILES/')) ) {
+  dir.create(paste0(outDir, '00_RAW_FILES/'))
+}
+# Download sequence data (lots of storage space needed!)
+rawFile <- paste0(outDir, 'mmg/')
+zipsByURI(filepath = rawFile, savepath = outDir, unzip = FALSE, saveZippedFiles = TRUE)
 # generate cleaner combined metadata
 
 # generate anvi'o TSV for sample names in snakemake workflow
