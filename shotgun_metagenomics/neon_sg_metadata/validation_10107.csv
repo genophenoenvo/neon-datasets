@@ -1,0 +1,87 @@
+"table","fieldName","description","dataType","units","parserToCreate","entryValidationRulesParser","entryValidationRulesForm"
+"mic_dnaExtraction","uid","Unique ID within NEON database; an identifier for the record","string",NA,"[CREATE_UID]","",NA
+"mic_dnaExtraction","locationID","Identifier for location where sample was collected","string",NA,"[DERIVE_FROM_SAMPLE_TREE('sls_soilCoreCollection_in.sampleID' OR 'amc' OR 'swc.amc' OR 'asi.amc' OR 'sdg.amc' OR 'swc.asi.amc' OR 'swc.sdg.amc' OR 'asi.sdg.amc' OR 'swc.asi.sdg.amc' OR 'amb_fieldParent_in.sampleID')]","[NAMED_LOCATION_TYPE('OS Plot - bgc' OR 'AOS S2 named location type' OR 'AOS outlet named location type' OR 'AOS inlet named location type' OR 'AOS buoy named location type' OR 'AOS reach named location type' OR 'AOS riparian named location type')]",NA
+"mic_dnaExtraction","laboratoryName","Name of the laboratory or facility that is processing the sample","string",NA,"[DEFAULT_TO_LAB_LOGGED_IN]","",NA
+"mic_dnaExtraction","setDate","Date that trap was set","dateTime",NA,"[DERIVE_FROM_SAMPLE_TREE('sls_soilCoreCollection_in.sampleID' OR 'amc' OR 'swc.amc' OR 'asi.amc' OR 'sdg.amc' OR 'swc.asi.amc' OR 'swc.sdg.amc' OR 'asi.sdg.amc' OR 'swc.asi.sdg.amc' OR 'amb_fieldParent_in.sampleID')]","",NA
+"mic_dnaExtraction","collectDate","Date of the collection event","dateTime",NA,"[DERIVE_FROM_SAMPLE_TREE('sls_soilCoreCollection_in.sampleID' OR 'amc' OR 'swc.amc' OR 'asi.amc' OR 'sdg.amc' OR 'swc.asi.amc' OR 'swc.sdg.amc' OR 'asi.sdg.amc' OR 'swc.asi.sdg.amc' OR 'amb_fieldParent_in.sampleID')]","",NA
+"mic_dnaExtraction","processedDate","Date or date and time of processing event","dateTime",NA,"[CONVERT_TO_UTC(laboratoryName)]","[ASCII][REQUIRE]",NA
+"mic_dnaExtraction","geneticSampleID","Identifier for the genetic sample","string",NA,"","[EXISTS][ASCII]",NA
+"mic_dnaExtraction","geneticSampleFate","Fate of a genetic sample","string",NA,"[DEFAULT_TO('active')]","[ASCII]",NA
+"mic_dnaExtraction","geneticSampleCode","Barcode of a genetic sample","string",NA,"","",NA
+"mic_dnaExtraction","deprecatedVialID","Identifier on vial label, if different from standard ID","string",NA,"","[ASCII]",NA
+"mic_dnaExtraction","sampleClass","Class of a sample","string",NA,"[IF SAMPLE_CLASS('sample')='sls_metagenomicsPooling_in.compositeSampleID','mic_dnaExtraction_in.soilDnaSampleID'][IF SAMPLE_CLASS('sample')='sls_soilCoreCollection_in.geneticSampleID','mic_dnaExtraction_in.soilDnaSampleID'][IF SAMPLE_CLASS('sample')='amc_fieldCellCounts_in.geneticSampleID','mic_dnaExtraction_in.amcDnaSampleID'][IF SAMPLE_CLASS('sample')='amb_fieldParent_in.geneticSampleID','mic_dnaExtraction_in.ambDnaSampleID']","[ASCII]",NA
+"mic_dnaExtraction","dnaSampleID","Identifier for DNA sample","string",NA,"","[REQUIRE][DOES_NOT_EXIST][MATCH_REGULAR_EXPRESSION('(^[A-Z]{4}_[0-9]{3}-[M|O]-+(20[0-9]{2}(0[1-9]|1[012])(0[1-9]|1[0-9]|2[0-9]|3[01])-(?i)comp))|(^[A-Z]{4}_[0-9]{3}-[M|O]-+([1-4]*[0-9]{1}-|[1-4]*[0-9]{1}.5-)+([1-4]*[0-9]{1}-|[1-4]*[0-9]{1}.5-)+(20[0-9]{2}(0[1-9]|1[012])(0[1-9]|1[0-9]|2[0-9]|3[01])-(?i)gen))|((?i)[A-Z]{4}+(\\.|\\.ss\\.|\\.in\\.|\\.ot\\.|\\.re\\.|\\.c[0-3]\\.)+(20[0-9]{2}(0[1-9]|1[012])(0[1-9]|1[0-9]|2[0-9]|3[01])))')][MATCH_REGULAR_EXPRESSION('-(?i)dna[0-9]{1}$')]",NA
+"mic_dnaExtraction","dnaSampleFate","Fate of a DNA sample","string",NA,"[DEFAULT_TO('active')]","",NA
+"mic_dnaExtraction","dnaSampleCode","Barcode of a DNA sample","string",NA,"","[ASCII]",NA
+"mic_dnaExtraction","internalLabID","Internal identifier used by the external facility","string",NA,"","[ASCII][IF collectDate>2016-01-01T00:00, REQUIRE]",NA
+"mic_dnaExtraction","subsampleID","Unique identifier associated with each subsample per sampleID","string",NA,"dnaSampleID+'_'+internalLabID","[ASCII][DOES_NOT_EXIST]",NA
+"mic_dnaExtraction","subsampleFate","Fate of a subsample","string",NA,"[DEFAULT_TO('active')]","",NA
+"mic_dnaExtraction","subsampleCode","Barcode of a subsample","string",NA,"","[ASCII]",NA
+"mic_dnaExtraction","sequenceAnalysisType","The general type of sequencing to be conducted on a sample","string",NA,"","[REQUIRE][LOV]",NA
+"mic_dnaExtraction","testMethod","Method used to conduct test","string",NA,"","[LOV]",NA
+"mic_dnaExtraction","sampleMaterial","The material in which a sample was embedded prior to the sampling event","string",NA,"[IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)-M-|-O-'), 'soil'][IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)seston|plankton'), 'water'][IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)\\.ss\\.|\\.in\\.|\\.ot\\.|\\.re\\.|\\.c[0-3]\\.'), 'water'][IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)epilithon'), 'biofilm'][IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)epixylon'), 'biofilm'][IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)epiphyton'), 'plant-associated'][IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)epipsammon'), 'sediment'][IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)epipelon'), 'sediment']","[LOV]",NA
+"mic_dnaExtraction","sampleMass","Mass of sample","real","gram","","[IF(sampleMaterial='soil'),REQUIRE][IF(sampleMaterial='water'),REQUIRE_NULL][GREATER_THAN_OR_EQUAL_TO(0)][LESS_THAN_OR_EQUAL_TO(100)]",NA
+"mic_dnaExtraction","samplePercent","Percent of sample processed","real","percent","","[IF(sampleMaterial='water'),REQUIRE][IF(sampleMaterial='biofilm'),REQUIRE][IF(sampleMaterial='plant-associated' AND IS_BLANK(sampleMass)),REQUIRE][IF(sampleMaterial='plant-associated' AND IS_NOT_BLANK(sampleMass)),REQUIRE_NULL][IF(sampleMaterial='soil'),REQUIRE_NULL][GREATER_THAN_OR_EQUAL_TO(1)][LESS_THAN_OR_EQUAL_TO(300)]",NA
+"mic_dnaExtraction","nucleicAcidConcentration","Concentration of extracted nucleic acids","real","nanogramsPerMicroliter","","[GREATER_THAN_OR_EQUAL_TO(0)][LESS_THAN_OR_EQUAL_TO(100000)]",NA
+"mic_dnaExtraction","nucleicAcidQuantMethod","Nucleic acid quantitative method","string",NA,"","[LOV]",NA
+"mic_dnaExtraction","nucleicAcidPurity","Purity of nucleic acid sample","real",NA,"","[GREATER_THAN_OR_EQUAL_TO(0)]",NA
+"mic_dnaExtraction","dnaPooledStatus","Indicates whether multiple DNA extracts were pooled","string",NA,"","[LOV]",NA
+"mic_dnaExtraction","qaqcStatus","Status of internal QAQC","string",NA,"","[LOV]",NA
+"mic_dnaExtraction","dnaProcessedBy","An identifier for the individual who processed the sample(s)","string",NA,"","[ASCII]",NA
+"mic_dnaExtraction","remarks","Technician notes; free text comments accompanying the record","string",NA,"","[ASCII][IF(qaqcStatus='other' OR 'Pass; troubleshooting required'), REQUIRE]",NA
+"mic_dnaExtraction","dataQF","Data quality flag","string",NA,"","[ASCII]",NA
+"mms_metagenomeSequencing","uid","Unique ID within NEON database; an identifier for the record","string",NA,"[CREATE_UID]","",NA
+"mms_metagenomeSequencing","locationID","Identifier for location where sample was collected","string",NA,"[DERIVE_FROM_SAMPLE_TREE('sls_soilCoreCollection_in.sampleID' OR 'amc' OR 'swc.amc' OR 'asi.amc' OR 'sdg.amc' OR 'swc.asi.amc' OR 'swc.sdg.amc' OR 'asi.sdg.amc' OR 'swc.asi.sdg.amc' OR 'amb_fieldParent_in.sampleID')]","[NAMED_LOCATION_TYPE('OS Plot - bgc' OR 'AOS S2 named location type' OR 'AOS outlet named location type' OR 'AOS inlet named location type' OR 'AOS buoy named location type' OR 'AOS reach named location type' OR 'AOS riparian named location type')]",NA
+"mms_metagenomeSequencing","setDate","Date that trap was set","dateTime",NA,"[DERIVE_FROM_SAMPLE_TREE('sls_soilCoreCollection_in.sampleID' OR 'amc' OR 'swc.amc' OR 'asi.amc' OR 'sdg.amc' OR 'swc.asi.amc' OR 'swc.sdg.amc' OR 'asi.sdg.amc' OR 'swc.asi.sdg.amc' OR 'amb_fieldParent_in.sampleID')]","",NA
+"mms_metagenomeSequencing","collectDate","Date of the collection event","dateTime",NA,"[DERIVE_FROM_SAMPLE_TREE('sls_soilCoreCollection_in.sampleID' OR 'amc' OR 'swc.amc' OR 'asi.amc' OR 'sdg.amc' OR 'swc.asi.amc' OR 'swc.sdg.amc' OR 'asi.sdg.amc' OR 'swc.asi.sdg.amc' OR 'amb_fieldParent_in.sampleID')]","",NA
+"mms_metagenomeSequencing","laboratoryName","Name of the laboratory or facility that is processing the sample","string",NA,"[IF (IS_BLANK), DEFAULT_TO_LAB_LOGGED_IN]","",NA
+"mms_metagenomeSequencing","sequencingFacilityID","Name of the laboratory or facility that is sequencing samples","string",NA,"","[REQUIRE][LOV]",NA
+"mms_metagenomeSequencing","processedDate","Date or date and time of processing event","dateTime",NA,"[CONVERT_TO_UTC(laboratoryName)]","[ASCII][REQUIRE]",NA
+"mms_metagenomeSequencing","dnaSampleID","Identifier for DNA sample","string",NA,"","[EXISTS]",NA
+"mms_metagenomeSequencing","dnaSampleFate","Fate of a DNA sample","string",NA,"[DEFAULT_TO('active')]","",NA
+"mms_metagenomeSequencing","dnaSampleCode","Barcode of a DNA sample","string",NA,"","",NA
+"mms_metagenomeSequencing","internalLabID","Internal identifier used by the external facility","string",NA,"","[ASCII][IF laboratoryName != 'Argonne National Laboratory', REQUIRE]",NA
+"mms_metagenomeSequencing","subsampleID","Unique identifier associated with each subsample per sampleID","string",NA,"[IF laboratoryName != 'Argonne National Laboratory', dnaSampleID+'_'+internalLabID]","[ASCII][EXISTS]",NA
+"mms_metagenomeSequencing","subsampleFate","Fate of a subsample","string",NA,"[IF IS_NOT_BLANK(subsampleID), DEFAULT_TO('not a physical sample')]","",NA
+"mms_metagenomeSequencing","subsampleCode","Barcode of a subsample","string",NA,"","[ASCII]",NA
+"mms_metagenomeSequencing","barcodeSequence","DNA sequence of barcode primer used in a multiplexed DNA sequencing run","string",NA,"","",NA
+"mms_metagenomeSequencing","instrument_model","The model identifier of the sequencing instrument","string",NA,"","[REQUIRE][LOV]",NA
+"mms_metagenomeSequencing","sequencingMethod","Method used for DNA sequencing","string",NA,"","[REQUIRE][LOV]",NA
+"mms_metagenomeSequencing","investigation_type","Manner in which DNA libraries were constructed for analysis","string",NA,"[DEFAULT_TO('metagenome')]","",NA
+"mms_metagenomeSequencing","sequencingConcentration","Concentration of nucleic acid used for sequencing","real","nanogramsPerMicroliter","","[REQUIRE][GREATER_THAN_OR_EQUAL_TO(0)][LESS_THAN_OR_EQUAL_TO(10000)]",NA
+"mms_metagenomeSequencing","labPrepMethod","The method, protocol or standard operating procedure used by an analytical laboratory for preparing samples for analysis","string",NA,"","[REQUIRE][LOV]",NA
+"mms_metagenomeSequencing","sequencingProtocol","The protocol used to sequence DNA from a sample","string",NA,"","[REQUIRE][LOV]",NA
+"mms_metagenomeSequencing","illuminaAdapterKit","Identifier for the adapter sequences kit manufactured for use with Illumina sequencing technology","string",NA,"","[LOV][ASCII]",NA
+"mms_metagenomeSequencing","illuminaIndex1","Oligonucleotide sequence of the 5-prime index used to identify a unique sample in an Illumina-based sequencing run","string",NA,"","[MATCH_REGULAR_EXPRESSION('^[abcdghkmnrstvwyABCDGHKMNRSTVWY]{5,20}$')][ASCII]",NA
+"mms_metagenomeSequencing","illuminaIndex2","Oligonucleotide sequence of the 3-prime index used to identify a unique sample in an Illumina-based sequencing run","string",NA,"","[MATCH_REGULAR_EXPRESSION('^[abcdghkmnrstvwyABCDGHKMNRSTVWY]{5,20}$')][ASCII]",NA
+"mms_metagenomeSequencing","sequencerRunID","Identifier for the sequencing run","string",NA,"","[REQUIRE][ASCII]",NA
+"mms_metagenomeSequencing","qaqcStatus","Status of internal QAQC","string",NA,"","[LOV]",NA
+"mms_metagenomeSequencing","sampleTotalReadNumber","Total number of sequence reads in a sample","unsigned integer","number","","[REQUIRE][GREATER_THAN_OR_EQUAL_TO(0)][LESS_THAN_OR_EQUAL_TO(10000000000)]",NA
+"mms_metagenomeSequencing","sampleFilteredReadNumber","Number of sequence reads that pass quality filtering","unsigned integer","number","","[GREATER_THAN_OR_EQUAL_TO(0)][LESS_THAN_OR_EQUAL_TO(sampleTotalReadNumber)]",NA
+"mms_metagenomeSequencing","averageFilteredReadQuality","Average quality of sequence reads in a sample after quality filtering","real",NA,"","[GREATER_THAN_OR_EQUAL_TO(0)][LESS_THAN_OR_EQUAL_TO(100)]",NA
+"mms_metagenomeSequencing","ambiguousBasesNumber","Number of sequence reads in a quality filtered sample with more than 1 ambiguous base","unsigned integer","number","","[GREATER_THAN_OR_EQUAL_TO(0)][LESS_THAN_OR_EQUAL_TO(sampleFilteredReadNumber)]",NA
+"mms_metagenomeSequencing","ncbiProjectID","Identifier for the NCBI project associated with the sample","string",NA,"[IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)-M-|-O-'), 'PRJNA406974'][IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)seston|plankton'), 'PRJNA406977'][IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)\\.ss\\.|\\.in\\.|\\.ot\\.|\\.re\\.|\\.c[0-3]\\.'), 'PRJNA406977'][IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)epilithon'), 'PRJNA406976'][IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)epixylon'), 'PRJNA406976'][IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)epiphyton'), 'PRJNA406976'][IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)epipsamm'), 'PRJNA406976'][IF MATCH_REGULAR_EXPRESSION(dnaSampleID, '(?i)epipelon'), 'PRJNA406976']","[REQUIRE][LOV]",NA
+"mms_metagenomeSequencing","processedSeqFileName","File name of quality filtered sequence data","string",NA,"","[MATCH_REGULAR_EXPRESSION('^[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.]{4,200}$')]",NA
+"mms_metagenomeSequencing","processedSeqFileNameID","Identifier for processed sequence file name","string",NA,"[processedSeqFileName]","[DOES_NOT_EXIST]",NA
+"mms_metagenomeSequencing","processedSeqFileNameFate","Fate of the identifier for processed sequence file name","string",NA,"[IF IS_NOT_BLANK(processedSeqFileNameID), DEFAULT_TO('not a physical sample')]","[ASCII]",NA
+"mms_metagenomeSequencing","processedSeqFileNameCode","Barcode of the identifier for processed sequence file name","string",NA,"","[ASCII]",NA
+"mms_metagenomeSequencing","analyzedBy","Name of lab personnel analyzing sample","string",NA,"","[ASCII]",NA
+"mms_metagenomeSequencing","remarks","Technician notes; free text comments accompanying the record","string",NA,"","[ASCII][IF(qaqcStatus='other' OR 'Pass; troubleshooting required'), REQUIRE]",NA
+"mms_metagenomeSequencing","dataQF","Data quality flag","string",NA,"[IF(sampleTotalReadNumber<100000),'sequenceDepthBelowMinimum']","",NA
+"mms_rawDataFiles","uid","Unique ID within NEON database; an identifier for the record","string",NA,"[CREATE_UID]","",NA
+"mms_rawDataFiles","locationID","Identifier for location where sample was collected","string",NA,"[DERIVE_FROM_SAMPLE_TREE('sls_soilCoreCollection_in.sampleID' OR 'amc' OR 'swc.amc' OR 'asi.amc' OR 'sdg.amc' OR 'swc.asi.amc' OR 'swc.sdg.amc' OR 'asi.sdg.amc' OR 'swc.asi.sdg.amc' OR 'amb_fieldParent_in.sampleID')]","[NAMED_LOCATION_TYPE('OS Plot - bgc' OR 'AOS S2 named location type' OR 'AOS outlet named location type' OR 'AOS inlet named location type' OR 'AOS buoy named location type' OR 'AOS reach named location type' OR 'AOS riparian named location type')]",NA
+"mms_rawDataFiles","laboratoryName","Name of the laboratory or facility that is processing the sample","string",NA,"[IF (IS_BLANK), DEFAULT_TO_LAB_LOGGED_IN]","[REQUIRE][ASCII]",NA
+"mms_rawDataFiles","sequencingFacilityID","Name of the laboratory or facility that is sequencing samples","string",NA,"","[LOV][ASCII]",NA
+"mms_rawDataFiles","setDate","Date that trap was set","dateTime",NA,"[DERIVE_FROM_SAMPLE_TREE('sls_soilCoreCollection_in.sampleID' OR 'amc' OR 'swc.amc' OR 'asi.amc' OR 'sdg.amc' OR 'swc.asi.amc' OR 'swc.sdg.amc' OR 'asi.sdg.amc' OR 'swc.asi.sdg.amc' OR 'amb_fieldParent_in.sampleID')]","",NA
+"mms_rawDataFiles","collectDate","Date of the collection event","dateTime",NA,"[DERIVE_FROM_SAMPLE_TREE('sls_soilCoreCollection_in.sampleID' OR 'amc' OR 'swc.amc' OR 'asi.amc' OR 'sdg.amc' OR 'swc.asi.amc' OR 'swc.sdg.amc' OR 'asi.sdg.amc' OR 'swc.asi.sdg.amc' OR 'amb_fieldParent_in.sampleID')]","",NA
+"mms_rawDataFiles","sequencerRunID","Identifier for the sequencing run","string",NA,"","[REQUIRE][ASCII]",NA
+"mms_rawDataFiles","dnaSampleID","Identifier for DNA sample","string",NA,"","[EXISTS]",NA
+"mms_rawDataFiles","dnaSampleFate","Fate of a DNA sample","string",NA,"[DEFAULT_TO('active')]","",NA
+"mms_rawDataFiles","dnaSampleCode","Barcode of a DNA sample","string",NA,"","",NA
+"mms_rawDataFiles","internalLabID","Internal identifier used by the external facility","string",NA,"","[ASCII][IF laboratoryName != 'Argonne National Laboratory', REQUIRE]",NA
+"mms_rawDataFiles","rawDataFileName","Name of file or folder containing raw data, including file extension","string",NA,"","[REQUIRE][MATCH_REGULAR_EXPRESSION('(?i)\\.zip|(?i)\\.gz|(?i)\\.bz2')][NOT_MATCH_REGULAR_EXPRESSION('(?i)_16S|(?i)_ITS')][ASCII]",NA
+"mms_rawDataFiles","rawDataFileDescription","Description of the contents and type of file","string",NA,"","[REQUIRE][ASCII]",NA
+"mms_rawDataFiles","parentFolderName","Name of parent folder in which the file was uploaded","string",NA,"","[REQUIRE][MATCH_REGULAR_EXPRESSION('20[1-5][0-9]')]",NA
+"mms_rawDataFiles","rawDataFilePath","The system path identifying the raw data file location","uri",NA,"[URI('https://neon-microbial-raw-seq-files.s3.data.neonscience.org/') + parentFolderName + '/' + rawDataFileName]","[VERIFY_URL][MIME_TYPE('application/zip' OR 'application/gzip' OR 'application/bzip2')][ASCII]",NA
+"mms_rawDataFiles","remarks","Technician notes; free text comments accompanying the record","string",NA,"","[ASCII]",NA
+"mms_rawDataFiles","dataQF","Data quality flag","string",NA,"","[ASCII]",NA
