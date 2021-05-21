@@ -1,3 +1,20 @@
+# Contents
+```
+📦shotgun_metagenomics
+ ┣ 📂neon_sg_metadata
+ ┃ ┣ 📜categoricalCodes_10107.csv
+ ┃ ┣ 📜mms_metagenomeDnaExtraction.csv
+ ┃ ┣ 📜mms_metagenomeSequencing.csv
+ ┃ ┣ 📜mms_rawDataFiles.csv
+ ┃ ┣ 📜neon_sg_sequencing_metadata.R
+ ┃ ┣ 📜readme_10107.csv
+ ┃ ┣ 📜validation_10107.csv
+ ┃ ┗ 📜variables.csv
+ ┣ 📜README.md
+ ┗ 📜neon-anvio-config.snake
+```
+
+
 # NEON Shotgun Metagenome Data Processing
 
 ## 1. Download the Data
