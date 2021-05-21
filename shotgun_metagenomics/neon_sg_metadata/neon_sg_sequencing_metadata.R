@@ -26,42 +26,8 @@ filenames <- list.files(path = metadata__file_path,
 #read in list of files as data frames
 raw_metadata <- lapply(data_path, FUN = function(i){
   read.csv(i, header=TRUE, stringsAsFactors = FALSE)})
-#name the data frames in the list after their 
+#name the data frames in the list after their filenames
 names(raw_metadata) <- filenames
-colnames(raw_metadata$mms_metagenomeDnaExtraction.csv)
-
-
-# function to take a column and return counts table of unique categorical variables 
-# for Exploratory Data Analysis (EDA)
-n2tab_count <-function(n){
-  df <- as.data.frame(table(as.vector(n)), stringsAsFactors = FALSE)
-  return(df)}
-
-# DNA Extraction EDA
-
-#get counts of laboratory
-laboratory_counts <- n2tab_count(raw_metadata$mms_metagenomeDnaExtraction.csv$laboratoryName)
-print(laboratory_counts)
-# Var1 Freq
-# 1 Argonne National Laboratory  628
-# 2   Battelle Applied Genomics 3664
-
-#get pooled status counts
-pooled_status <- n2tab_count(raw_metadata$mms_metagenomeDnaExtraction.csv$dnaPooledStatus)
-print(pooled_status)
-# Var1 Freq
-#  N   4205
-#  Y   87
-
-# QA QC status
-qaqc_status <- n2tab_count(raw_metadata$mms_metagenomeDnaExtraction.csv$qaqcStatus)
-print(qaqc_status)
-
-#            Var1 Freq
-# 1         Fail   16
-# 2 Not recorded   99
-# 3         Pass 3648
-
 
 # Filter data by:
 # qaqcStatus == "Pass"
@@ -74,9 +40,6 @@ metagenomeDnaExtraction <- raw_metadata$mms_metagenomeDnaExtraction.csv %>%
            laboratoryName != "Argonne National Laboratory",
            sequenceAnalysisType != "marker gene")
 
-# sanity check: how many extractions are filtered out?
-# dim(raw_metadata$mms_metagenomeDnaExtraction.csv)-dim(metagenomeDnaExtraction)
-# 3271 samples removed by filtering leaving only shotgun mag data
 # ---------------------------------------------------------------------------
 # Filter metagenome sequencing by the DNA extraction id's included in the df above
 # and remove sequencing that did not pass Quality Filtering
@@ -90,18 +53,51 @@ colnames(raw_metadata$mms_rawDataFiles.csv)
 n2tab_count(raw_metadata$mms_rawDataFiles.csv$dataQF)
 
 n2tab_count(raw_metadata$mms_rawDataFiles.csv$laboratoryName)
+#filter raw data files by:
+# dnaSampleID
+# QF comments = is.na(dataQF)
+# only unique tar.gz directories = distinct(rawDataFileName, .keep_all = TRUE)
 
 rawDataFiles <- raw_metadata$mms_rawDataFiles.csv %>% 
   filter(dnaSampleID %in% metagenomeSequencing$dnaSampleID,
-         is.na(dataQF))
-# sanity check: unique tarballs of sequencing data:
-# print(n2tab_count(rawDataFiles$rawDataFileName))
-if(!dir.exists(paste0(outDir, '00_RAW_FILES/')) ) {
-  dir.create(paste0(outDir, '00_RAW_FILES/'))
-}
-# Download sequence data (lots of storage space needed!)
-rawFile <- paste0(outDir, 'mmg/')
-zipsByURI(filepath = rawFile, savepath = outDir, unzip = FALSE, saveZippedFiles = TRUE)
-# generate cleaner combined metadata
+         is.na(dataQF)) %>% 
+          distinct(rawDataFileName, .keep_all = TRUE)
 
-# generate anvi'o TSV for sample names in snakemake workflow
+# output processed metadata
+processed_metadata <- vector(mode = "list", length = length(raw_metadata))
+# transfer all unfiltered metadata, these are usually instructional in nature
+for(i in c(1,5:7)){
+  processed_metadata[[i]] <- raw_metadata[[i]]
+}
+#transfer the same names
+names(processed_metadata) <- names(raw_metadata)
+#add back the processed data frames
+processed_metadata[[2]] <- metagenomeDnaExtraction
+processed_metadata[[3]] <- metagenomeSequencing
+processed_metadata[[4]] <- rawDataFiles
+
+#create directory in repo for processed metadata if it does not already exist
+meta_dir <- "~/neon-datasets/shotgun_metagenomics/neon_sg_metadata/processed_metadata/"
+if(!dir.exists(paste0(meta_dir)) ) {
+  dir.create(paste0(meta_dir))
+}
+
+#write out processed metadata as csv's
+for(i in names(processed_metadata)){
+  write.csv(processed_metadata[[i]], file = paste0(meta_dir, i), row.names=FALSE)
+}
+# make general output directory for workflow
+out_dir <- "~/neon_fastq/"
+if(!dir.exists(paste0(out_dir)) ) {
+  dir.create(paste0(out_dir))
+}
+
+# raw fastq files from NEON api get downloaded here
+fq_out_dir <- paste0(out_dir, '00_raw_fastq/')
+if(!dir.exists(paste0(fq_out_dir)) ) {
+  dir.create(paste0(fq_out_dir))
+}
+
+
+# Download sequence data (lots of storage space needed!)
+zipsByURI(filepath = meta_dir, savepath = fq_out_dir, unzip = FALSE, saveZippedFiles = TRUE)
