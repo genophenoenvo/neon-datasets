@@ -2,7 +2,6 @@
 
 suppressMessages(library(neonUtilities))
 suppressMessages(library(tidyverse))
-suppressMessages(library(gridExtra))
 
 #Exploratory neonUtilities metadata analysis
 # These are how the data filtering was determined

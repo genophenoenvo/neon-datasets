@@ -1,6 +1,7 @@
-library(neonUtilities)
-library(tidyverse)
-library(gridExtra)
+#!/usr/bin/env Rscript
+
+suppressMessages(library(neonUtilities))
+suppressMessages(library(tidyverse))
 
 # Downloading Data from NEON
 # Set NEON API key
@@ -48,11 +49,6 @@ metagenomeSequencing <- raw_metadata$mms_metagenomeSequencing.csv %>%
           is.na(dataQF))
 
 
-colnames(raw_metadata$mms_rawDataFiles.csv)
-
-n2tab_count(raw_metadata$mms_rawDataFiles.csv$dataQF)
-
-n2tab_count(raw_metadata$mms_rawDataFiles.csv$laboratoryName)
 #filter raw data files by:
 # dnaSampleID
 # QF comments = is.na(dataQF)
@@ -100,4 +96,5 @@ if(!dir.exists(paste0(fq_out_dir)) ) {
 
 
 # Download sequence data (lots of storage space needed!)
-zipsByURI(filepath = meta_dir, savepath = fq_out_dir, unzip = FALSE, saveZippedFiles = TRUE)
+zipsByURI(filepath = meta_dir, savepath = fq_out_dir, check.size = FALSE,
+          unzip = FALSE, saveZippedFiles = TRUE)
