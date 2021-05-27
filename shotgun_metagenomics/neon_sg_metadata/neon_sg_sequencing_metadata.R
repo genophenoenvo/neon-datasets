@@ -13,10 +13,10 @@ suppressMessages(library(tidyverse))
 #                     token = NEON_TOKEN, check.size = FALSE, nCores = 3)
 
 
-
+print("Loading Metadata Files...")
 # Soil Shotgun Metagenome Sequences: DP1.10107.001
 #relative path to this folder
-metadata__file_path <- "~/neon-datasets/shotgun_metagenomics/neon_sg_metadata/"
+metadata__file_path <- "/work/shotgun_metagenomics/neon_sg_metadata/"
 
 #list all the csv files (NEON Metadata)
 data_path <- list.files(path = metadata__file_path,
@@ -30,6 +30,8 @@ raw_metadata <- lapply(data_path, FUN = function(i){
 #name the data frames in the list after their filenames
 names(raw_metadata) <- filenames
 
+
+print("Filtering metadata files...")
 # Filter data by:
 # qaqcStatus == "Pass"
 # dnaPooledStatus == "N"
@@ -72,8 +74,9 @@ processed_metadata[[2]] <- metagenomeDnaExtraction
 processed_metadata[[3]] <- metagenomeSequencing
 processed_metadata[[4]] <- rawDataFiles
 
+print("Generating Filtered Metadata Output...")
 #create directory in repo for processed metadata if it does not already exist
-meta_dir <- "~/neon-datasets/shotgun_metagenomics/neon_sg_metadata/processed_metadata/"
+meta_dir <- "/work/shotgun_metagenomics/neon_sg_metadata/processed_metadata/"
 if(!dir.exists(paste0(meta_dir)) ) {
   dir.create(paste0(meta_dir))
 }
@@ -83,7 +86,7 @@ for(i in names(processed_metadata)){
   write.csv(processed_metadata[[i]], file = paste0(meta_dir, i), row.names=FALSE)
 }
 # make general output directory for workflow
-out_dir <- "~/neon_fastq/"
+out_dir <- "/work/neon_fastq/"
 if(!dir.exists(paste0(out_dir)) ) {
   dir.create(paste0(out_dir))
 }
@@ -94,7 +97,7 @@ if(!dir.exists(paste0(fq_out_dir)) ) {
   dir.create(paste0(fq_out_dir))
 }
 
-
+print("Start NEON Metagenome Data Pull...")
 # Download sequence data (lots of storage space needed!)
 zipsByURI(filepath = meta_dir, savepath = fq_out_dir, check.size = FALSE,
           unzip = FALSE, saveZippedFiles = TRUE)
