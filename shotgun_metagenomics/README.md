@@ -37,6 +37,9 @@ These FASTQ files are QA/QC'd with [illumina-utils](https://github.com/merenlab/
 
 ## 1. Download the Data
 
+
+### Use Case:
+
 Download the fastq files using the R package `neon_utilities` and the script `neon_sg_metadata_merging.R`
 This outputs a file for downstream processing with illumina utilities.
 
@@ -47,6 +50,11 @@ This outputs a file for downstream processing with illumina utilities.
   * Make sample bar code tsv for illumina-utils:
     * r1, r2, sample name
 
+### Running the code with docker
+
+The NEON shotgun metagenome sequence data are downloaded using docker and the Rscript in this repository.
+
+`docker run -v /host/path/to/neon-datasets/:/work/ -v /path/to/root/owned/directory/:/output/ rbartelme/neonmicrobe /work/shotgun_metagenomics/neon_sg_metadata/neon_sg_sequencing_metadata.R`
 
 ## 2. QA/QC
 
