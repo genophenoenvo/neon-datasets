@@ -87,3 +87,30 @@ n2tab_count(raw_metadata$mms_rawDataFiles.csv$laboratoryName)
 rawDataFiles <- raw_metadata$mms_rawDataFiles.csv %>% 
   filter(dnaSampleID %in% metagenomeSequencing$dnaSampleID,
          is.na(dataQF))
+
+
+### Checking Download from NEON API on 05-27-2021
+cereus_fq <- read.table(file = "~/neon-datasets/shotgun_metagenomics/fastq_list.txt")
+
+raw_fq <- read.csv(file = "~/neon-datasets/shotgun_metagenomics/neon_sg_metadata/processed_metadata/mms_rawDataFiles.csv", header = TRUE)
+
+# what file is missing? 
+setdiff(raw_fq$rawDataFileName, cereus_fq$V1)
+# [1] "BMI_HL7C5BGX7_mms_R1_D.fastq.tar.gz"
+
+### Testing untar
+# tar -xvf BMI_H7FFKBGX5_mms_R1_A.fastq.tar.gz
+
+# Produces the following reads:
+
+# BMI_Plate1WellB5_mms_R1.fastq  BMI_Plate1WellG2_mms_R1.fastq
+# BMI_Plate1WellB9_mms_R1.fastq  BMI_Plate1WellH7_mms_R1.fastq
+
+# test vs. metadata
+head(raw_fq)
+
+# check counts per base plot - geospatial data depends on this
+filtered_metagenome_data <- read.csv(file = "~/neon-datasets/shotgun_metagenomics/neon_sg_metadata/processed_metadata/mms_metagenomeSequencing.csv")
+baseplot_sampling <- n2tab_count(filtered_metagenome_data$namedLocation)
+names(baseplot_sampling) <- c("basePlot", "n_samples")
+write.csv(x = baseplot_sampling, file = "~/neon-datasets/shotgun_metagenomics/baseplot_freq.csv", row.names = FALSE)

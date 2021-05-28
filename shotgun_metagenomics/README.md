@@ -35,10 +35,7 @@ These FASTQ files are QA/QC'd with [illumina-utils](https://github.com/merenlab/
 
 # NEON Shotgun Metagenome Data Processing
 
-## 1. Download the Data
-
-
-### Use Case:
+## Use Case:
 
 Download the fastq files using the R package `neon_utilities` and the script `neon_sg_metadata_merging.R`
 This outputs a file for downstream processing with illumina utilities.
@@ -50,11 +47,21 @@ This outputs a file for downstream processing with illumina utilities.
   * Make sample bar code tsv for illumina-utils:
     * r1, r2, sample name
 
-### Running the code with docker
+## 1. Download the Data
 
-The NEON shotgun metagenome sequence data are downloaded using docker and the Rscript in this repository.
+### Downloading with neonMicrobe docker container:
+
+The NEON shotgun metagenome sequence data are downloaded using docker and an Rscript in this repository.
+
+*To run this code, you need to `sudo` priviledges on the docker host. 
+
+ The first `docker run -v` statement refers to mounting this repository as a volume inside the container. The second `docker run -v` mounts a directory from the local host to download the `*.tar.gz` files from NEON's S3 storage.
 
 `docker run -v /host/path/to/neon-datasets/:/work/ -v /path/to/root/owned/directory/:/output/ rbartelme/neonmicrobe /work/shotgun_metagenomics/neon_sg_metadata/neon_sg_sequencing_metadata.R`
+
+After downloading the shotgun metagenome data, you may need to use `chown` to operate on the downloaded fastq files.
+
+For example: `sudo chown -R username /neon_fastq/`
 
 ## 2. QA/QC
 
