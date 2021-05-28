@@ -110,7 +110,11 @@ setdiff(raw_fq$rawDataFileName, cereus_fq$V1)
 head(raw_fq)
 
 # check counts per base plot - geospatial data depends on this
-filtered_metagenome_data <- read.csv(file = "~/neon-datasets/shotgun_metagenomics/neon_sg_metadata/processed_metadata/mms_metagenomeSequencing.csv")
+seq_meta_path <- "~/neon-datasets/shotgun_metagenomics/neon_sg_metadata/processed_metadata/mms_metagenomeSequencing.csv"
+filtered_metagenome_data <- read.csv(file = seq_meta_path)
 baseplot_sampling <- n2tab_count(filtered_metagenome_data$namedLocation)
 names(baseplot_sampling) <- c("basePlot", "n_samples")
 write.csv(x = baseplot_sampling, file = "~/neon-datasets/shotgun_metagenomics/baseplot_freq.csv", row.names = FALSE)
+
+site_sampling <- n2tab_count(filtered_metagenome_data$siteID)
+write.csv(x = site_sampling, file = "~/neon-datasets/shotgun_metagenomics/site_freq.csv", row.names = FALSE)
