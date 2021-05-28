@@ -29,7 +29,7 @@ raw_metadata <- lapply(data_path, FUN = function(i){
   read.csv(i, header=TRUE, stringsAsFactors = FALSE)})
 #name the data frames in the list after their filenames
 names(raw_metadata) <- filenames
-
+print("Finished loading metadata files.")
 
 print("Filtering metadata files...")
 # Filter data by:
@@ -73,6 +73,7 @@ names(processed_metadata) <- names(raw_metadata)
 processed_metadata[[2]] <- metagenomeDnaExtraction
 processed_metadata[[3]] <- metagenomeSequencing
 processed_metadata[[4]] <- rawDataFiles
+print("Finished Filtering Metadata.")
 
 print("Generating Filtered Metadata Output...")
 #create directory in repo for processed metadata if it does not already exist
@@ -85,8 +86,11 @@ if(!dir.exists(paste0(meta_dir)) ) {
 for(i in names(processed_metadata)){
   write.csv(processed_metadata[[i]], file = paste0(meta_dir, i), row.names=FALSE)
 }
+print("Finished Writing Filtered Metadata Output")
+
+print("Creating FASTQ output directories")
 # make general output directory for workflow
-out_dir <- "/work/neon_fastq/"
+out_dir <- "/output/"
 if(!dir.exists(paste0(out_dir)) ) {
   dir.create(paste0(out_dir))
 }
@@ -96,8 +100,11 @@ fq_out_dir <- paste0(out_dir, '00_raw_fastq/')
 if(!dir.exists(paste0(fq_out_dir)) ) {
   dir.create(paste0(fq_out_dir))
 }
+print("Finished Creating FASTQ Output Directories")
 
 print("Start NEON Metagenome Data Pull...")
 # Download sequence data (lots of storage space needed!)
 zipsByURI(filepath = meta_dir, savepath = fq_out_dir, check.size = FALSE,
           unzip = FALSE, saveZippedFiles = TRUE)
+
+print("Finished downloading FASTQ files from NEON.")
