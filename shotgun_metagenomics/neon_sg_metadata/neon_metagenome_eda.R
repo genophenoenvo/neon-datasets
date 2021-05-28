@@ -118,3 +118,8 @@ write.csv(x = baseplot_sampling, file = "~/neon-datasets/shotgun_metagenomics/ba
 
 site_sampling <- n2tab_count(filtered_metagenome_data$siteID)
 write.csv(x = site_sampling, file = "~/neon-datasets/shotgun_metagenomics/site_freq.csv", row.names = FALSE)
+n2tab_count(filtered_metagenome_data$labPrepMethod)
+n2tab_count(filtered_metagenome_data$sequencingProtocol)
+
+# need to look at SOP versioning
+# https://data.neonscience.org/documents/-/document_library_display/JEygRkSpUBoq/view_file/2951800?_110_INSTANCE_JEygRkSpUBoq_redirect=https%3A%2F%2Fdata.neonscience.org%2Fdocuments%2F-%2Fdocument_library_display%2FJEygRkSpUBoq%2Fview%2F2431540%3F_110_INSTANCE_JEygRkSpUBoq_redirect%3Dhttps%253A%252F%252Fdata.neonscience.org%252Fdocuments%253Fp_p_id%253D110_INSTANCE_JEygRkSpUBoq%2526p_p_lifecycle%253D0%2526p_p_state%253Dnormal%2526p_p_mode%253Dview%2526p_p_col_id%253Dcolumn-1%2526p_p_col_count%253D1
