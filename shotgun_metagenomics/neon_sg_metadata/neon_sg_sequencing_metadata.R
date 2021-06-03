@@ -3,6 +3,10 @@
 suppressMessages(library(neonUtilities))
 suppressMessages(library(tidyverse))
 
+# set timeout in R-base to be 6 minutes
+# this avoids data fragmentation
+options(timeout=300)
+
 # Downloading Data from NEON
 # Set NEON API key
 #NEON_TOKEN <- Sys.getenv(x = "NEON_TOKEN")
