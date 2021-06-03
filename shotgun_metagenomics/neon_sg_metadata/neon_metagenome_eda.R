@@ -87,3 +87,39 @@ n2tab_count(raw_metadata$mms_rawDataFiles.csv$laboratoryName)
 rawDataFiles <- raw_metadata$mms_rawDataFiles.csv %>% 
   filter(dnaSampleID %in% metagenomeSequencing$dnaSampleID,
          is.na(dataQF))
+
+
+### Checking Download from NEON API on 05-27-2021
+cereus_fq <- read.table(file = "~/neon-datasets/shotgun_metagenomics/fastq_list.txt")
+
+raw_fq <- read.csv(file = "~/neon-datasets/shotgun_metagenomics/neon_sg_metadata/processed_metadata/mms_rawDataFiles.csv", header = TRUE)
+
+# what file is missing? 
+setdiff(raw_fq$rawDataFileName, cereus_fq$V1)
+# [1] "BMI_HL7C5BGX7_mms_R1_D.fastq.tar.gz"
+
+### Testing untar
+# tar -xvf BMI_H7FFKBGX5_mms_R1_A.fastq.tar.gz
+
+# Produces the following reads:
+
+# BMI_Plate1WellB5_mms_R1.fastq  BMI_Plate1WellG2_mms_R1.fastq
+# BMI_Plate1WellB9_mms_R1.fastq  BMI_Plate1WellH7_mms_R1.fastq
+
+# test vs. metadata
+head(raw_fq)
+
+# check counts per base plot - geospatial data depends on this
+seq_meta_path <- "~/neon-datasets/shotgun_metagenomics/neon_sg_metadata/processed_metadata/mms_metagenomeSequencing.csv"
+filtered_metagenome_data <- read.csv(file = seq_meta_path)
+baseplot_sampling <- n2tab_count(filtered_metagenome_data$namedLocation)
+names(baseplot_sampling) <- c("basePlot", "n_samples")
+write.csv(x = baseplot_sampling, file = "~/neon-datasets/shotgun_metagenomics/baseplot_freq.csv", row.names = FALSE)
+
+site_sampling <- n2tab_count(filtered_metagenome_data$siteID)
+write.csv(x = site_sampling, file = "~/neon-datasets/shotgun_metagenomics/site_freq.csv", row.names = FALSE)
+n2tab_count(filtered_metagenome_data$labPrepMethod)
+n2tab_count(filtered_metagenome_data$sequencingProtocol)
+
+# need to look at SOP versioning
+# https://data.neonscience.org/documents/-/document_library_display/JEygRkSpUBoq/view_file/2951800?_110_INSTANCE_JEygRkSpUBoq_redirect=https%3A%2F%2Fdata.neonscience.org%2Fdocuments%2F-%2Fdocument_library_display%2FJEygRkSpUBoq%2Fview%2F2431540%3F_110_INSTANCE_JEygRkSpUBoq_redirect%3Dhttps%253A%252F%252Fdata.neonscience.org%252Fdocuments%253Fp_p_id%253D110_INSTANCE_JEygRkSpUBoq%2526p_p_lifecycle%253D0%2526p_p_state%253Dnormal%2526p_p_mode%253Dview%2526p_p_col_id%253Dcolumn-1%2526p_p_col_count%253D1
