@@ -121,5 +121,31 @@ write.csv(x = site_sampling, file = "~/neon-datasets/shotgun_metagenomics/site_f
 n2tab_count(filtered_metagenome_data$labPrepMethod)
 n2tab_count(filtered_metagenome_data$sequencingProtocol)
 
+#load processed metadata for sequencing
+
+#load tidyverse to manipulate strings "Plate.*[0-9]_"
+library(tidyverse)
+
+#read processed sequencing metadata csv in as df
+seq_runs <- read.csv(file = "~/neon-datasets/shotgun_metagenomics/neon_sg_metadata/processed_metadata/mms_metagenomeSequencing.csv",
+           header = TRUE)
+#read in fastq paths from download directory
+loc_fastq <- read.table(file = "~/neon-datasets/shotgun_metagenomics/all_decompressed_fastq.txt", sep = "\t")
+
+names <- unique(seq_runs$internalLabID)
+d <- tibble(loc_fastq)
+fastq_dbug <- d %>% 
+  mutate(R1_regex_match = str_match(V1, names),
+         R2_regex_match = str_detect(V2, names))
+
+setdiff(str_extract(na.omit(loc_fastq$V2), "Plate.*[0-9]_"), str_extract(loc_fastq$V1, "Plate.*[0-9]_"))
+length(na.omit(loc_fastq$V2))
+length(na.omit(loc_fastq$V1))
+
+str_match(loc_fastq$V2, "Plate.*[0-9]_")
+#test does stringr extract all file names? with regex statement?
+length(seq_runs$internalLabID)-length(str_extract(seq_runs$internalLabID,  "Plate.*[0-9]_"))
+
+
 # need to look at SOP versioning
 # https://data.neonscience.org/documents/-/document_library_display/JEygRkSpUBoq/view_file/2951800?_110_INSTANCE_JEygRkSpUBoq_redirect=https%3A%2F%2Fdata.neonscience.org%2Fdocuments%2F-%2Fdocument_library_display%2FJEygRkSpUBoq%2Fview%2F2431540%3F_110_INSTANCE_JEygRkSpUBoq_redirect%3Dhttps%253A%252F%252Fdata.neonscience.org%252Fdocuments%253Fp_p_id%253D110_INSTANCE_JEygRkSpUBoq%2526p_p_lifecycle%253D0%2526p_p_state%253Dnormal%2526p_p_mode%253Dview%2526p_p_col_id%253Dcolumn-1%2526p_p_col_count%253D1
