@@ -1,4 +1,5 @@
 # Explore to see if file structure similar across all .txt files
+library(ggplot2)
 
 # Obtain all file names, then separate by site
 all <- list.files("../rawData/phenophases")
@@ -49,3 +50,19 @@ length(phen_ids) # Across surveys, 1482 unique cultivars represented
 
 sum(gen_ids %in% phen_ids) # 1221 cottonwood cultivars overlap, have data for both
 sum(phen_ids %in% gen_ids)
+
+### Plot # of overlapping cultivars
+sum_overlap <- data.frame(files = all)
+sum_overlap$cultivar_overlap <- c()
+for(i in 1:length(all_txt)){
+  sum_overlap$cultivar_overlap[i] <- sum(unique(all_txt[[i]]$V1) %in% gen_ids)
+}
+range(sum_overlap$cultivar_overlap)
+
+jpeg(filename = "../plots/01_explore/cultivar_overlap.jpg", 
+     height = 8, width = 8, units = "in", res = 600)
+ggplot(sum_overlap, aes(x = files, y = cultivar_overlap)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_bw(base_size = 12)
+dev.off()
