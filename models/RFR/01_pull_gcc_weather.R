@@ -1,3 +1,4 @@
+.libPaths(c("/home/kristinariemer/r_libs/", .libPaths()))
 ###########Pull input data###########
 
 # gcc from ecoforecast.org
