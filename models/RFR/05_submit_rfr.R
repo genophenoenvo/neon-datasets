@@ -1,3 +1,4 @@
+.libPaths(c("/home/kristinariemer/r_libs/", .libPaths()))
 # remotes::install_github("eco4cast/neon4cast")
 # library(neon4cast)
 library(readr)

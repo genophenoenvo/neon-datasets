@@ -1,5 +1,6 @@
+.libPaths(c("/home/kristinariemer/r_libs/", .libPaths()))
 ###########Pull input data###########
-
+getwd()
 # gcc from ecoforecast.org
 targets_gcc <- readr::read_csv("https://data.ecoforecast.org/targets/phenology/phenology-targets.csv.gz")
 
