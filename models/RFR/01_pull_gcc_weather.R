@@ -1,6 +1,6 @@
 .libPaths(c("/home/kristinariemer/r_libs/", .libPaths()))
 ###########Pull input data###########
-
+getwd()
 # gcc from ecoforecast.org
 targets_gcc <- readr::read_csv("https://data.ecoforecast.org/targets/phenology/phenology-targets.csv.gz")
 
@@ -16,7 +16,7 @@ library(readr)
 library(dplyr)
 library(udunits2)
 library(plantecophys)
-source("~/neon4cast/R/noaa.R")
+source("/home/kristinariemer/neon4cast/R/noaa.R")
 
 ###########Download weather data###########
 pheno_sites <- c("HARV", "BART", "SCBI", "STEI", "UKFS", "GRSM", "DELA", "CLBJ")
