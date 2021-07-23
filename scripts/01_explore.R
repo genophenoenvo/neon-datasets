@@ -1,5 +1,6 @@
 # Explore to see if file structure similar across all .txt files
 library(ggplot2)
+library(dplyr)
 
 # Obtain all file names, then separate by site
 all <- list.files("../rawData/phenophases")
@@ -54,10 +55,13 @@ sum(phen_ids %in% gen_ids)
 ### Plot # of overlapping cultivars
 sum_overlap <- data.frame(files = all)
 sum_overlap$cultivar_overlap <- c()
+sum_overlap$overlap_prop <- c()
 for(i in 1:length(all_txt)){
   sum_overlap$cultivar_overlap[i] <- sum(unique(all_txt[[i]]$V1) %in% gen_ids)
+  sum_overlap$overlap_prop[i] <- sum(unique(all_txt[[i]]$V1) %in% gen_ids) / length(unique(all_txt[[i]]$V1))
 }
 range(sum_overlap$cultivar_overlap)
+range(sum_overlap$overlap_prop)
 
 jpeg(filename = "../plots/01_explore/cultivar_overlap.jpg", 
      height = 8, width = 8, units = "in", res = 600)
@@ -66,3 +70,48 @@ ggplot(sum_overlap, aes(x = files, y = cultivar_overlap)) +
   coord_flip() +
   theme_bw(base_size = 12)
 dev.off()
+
+
+### Combine phenophase data across sites/dates/phenophases
+all <- list.files("../rawData/phenophases")
+all_list <- list()
+for(i in 1:length(all)){
+  
+  # Obtain characteristics from file names
+  fn <- all[i]
+  vars <- unlist(strsplit(fn, "\\_|\\.")) # split by either _ or .
+  site <- vars[which(vars %in% c("Clatskanie", "Corvallis", "Placerville", "UCDavis"))] # which of 4 sites
+  bud <- unique(vars[which(vars %in% c("Flush", "break", "burst", "Set"))]) # which phenophase; can match up "break" later
+  year <- if(length(grep("^\\d{4}$", vars)) > 0) {
+    as.numeric(grep("^\\d{4}$", vars, value = TRUE))
+    } else {NA} # exact match of 4 digit year code
+  rep <- if(length(grep("rep", vars, ignore.case = TRUE)) > 0) {
+    readr::parse_number(grep("rep", vars, ignore.case = TRUE, value = TRUE))
+    } else {NA} # rep number regardless of case
+  score <- if(length(grep("score\\d{1}$", vars)) > 0) {
+    readr::parse_number(grep("score\\d{1}$", vars, value = TRUE))
+    } else if(length(grep("^\\d{1}$", vars)) > 0) {
+    as.numeric(grep("^\\d{1}$", vars, value = TRUE))
+    } else {NA}
+  date <- if(length(grep("^\\d{1,2}-\\d{1,2}", vars)) > 0) {
+    as.Date(paste0(year, "-", grep("^\\d{1,2}-\\d{1,2}", vars, value = TRUE)))
+    } else {NA}
+  
+  # Add descriptors to dataframe
+  all_list[[i]] <- read.table(file = paste0("../rawData/phenophases/", fn)) %>%
+    rename(cultivar_id = V1, phenophase = V2) %>%
+    mutate(site = site,
+           budPhase = ifelse(bud %in% c("break", "burst"), "Flush", bud), # categorizes break and burst as Flush
+           year = year,
+           date = date,
+           rep = rep,
+           score = score) %>%
+    relocate(cultivar_id, phenophase, .after = last_col())
+    
+}
+
+# rbind all 76 files and check for budPhase terminology
+all_df <- do.call(rbind.data.frame, all_list)
+table(all_df$budPhase)
+
+table(all_df$site, all_df$year)
