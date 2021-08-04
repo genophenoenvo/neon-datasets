@@ -75,6 +75,14 @@ dev.off()
 ### Combine phenophase data across sites/dates/phenophases
 all <- list.files("../rawData/phenophases")
 all_list <- list()
+files_df <- data.frame(fn = character(0),
+                       site = character(0),
+                       bud = character(0),
+                       year = integer(0),
+                       block = integer(0),
+                       score = integer(0),
+                       date = as.Date(x = integer(0), origin = "1970-01-01"))
+dup_list <- list()
 for(i in 1:length(all)){
   
   # Obtain characteristics from file names
@@ -107,11 +115,39 @@ for(i in 1:length(all)){
            rep = rep,
            score = score) %>%
     relocate(cultivar_id, phenophase, .after = last_col())
-    
+  
+  # Add descriptors to file list
+  files_df[i, 1:6] <- c(fn, site, bud, year, rep, score)
+  files_df[i, 7] <- date
+  
+  # Create list of duplicates
+  dups <- all_list[[i]]$cultivar_id[duplicated(all_list[[i]]$cultivar_id)]
+  dup_list[[i]] <- read.table(file = paste0("../rawData/phenophases/", fn)) %>%
+    rename(cultivar_id = V1, phenophase = V2) %>%
+    filter(cultivar_id %in% dups) %>%
+    count(cultivar_id) %>%
+    mutate(site = site,
+           budPhase = ifelse(bud %in% c("break", "burst"), "Flush", bud), # categorizes break and burst as Flush
+           year = year,
+           date = date,
+           rep = rep,
+           score = score)
 }
+
+# Compare number of duplicates with dim_df
+dup_df <- do.call(rbind.data.frame, dup_list)
+hist(dup_df$n)
+write.csv(dup_df, file = "../cleanData/dupGenotypes.csv")
+
+# Write out files with missing dates
+files_nodates <- files_df %>%
+  filter(is.na(date))
+write.csv(files_nodates, file = "../cleanData/noDates.csv")
 
 # rbind all 76 files and check for budPhase terminology
 all_df <- do.call(rbind.data.frame, all_list)
 table(all_df$budPhase)
 
 table(all_df$site, all_df$year)
+
+
