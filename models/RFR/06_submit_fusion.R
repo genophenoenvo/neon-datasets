@@ -16,7 +16,8 @@ for(v in version){
   # Clean and format
   preds <- readr::read_csv(file.path(v, "outputs", out[ind])) %>% 
     filter(!time <= Sys.Date()) %>%
-    relocate(gcc_sd, rcc_sd, .after = rcc_90)
+    relocate(gcc_sd, rcc_sd, .after = rcc_90) %>% 
+    pivot_longer(cols = c('gcc_90', 'rcc_90', 'gcc_sd', 'rcc_sd'), names_to = 'statistic', values_to = 'value')
   
   # Score
   # scores <- score(preds, theme = "phenology")
