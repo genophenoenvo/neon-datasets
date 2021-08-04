@@ -2,3 +2,5 @@
 
 *.jpg
 *.Rdata
+
+cleanData/*.csv
