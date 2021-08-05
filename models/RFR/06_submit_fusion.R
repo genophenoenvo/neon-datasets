@@ -18,10 +18,10 @@ for(v in version){
     filter(!time <= Sys.Date()) %>%
     relocate(gcc_sd, rcc_sd, .after = rcc_90) %>% 
     pivot_longer(cols = c('gcc_90', 'rcc_90', 'gcc_sd', 'rcc_sd'), 
-                 names_to = c("variable", "stat"), 
+                 names_to = c("variable", "statistic"), 
                  names_pattern = "(.*)_(.*)",
                  values_to = 'value') %>%
-    mutate(stat = recode(stat, `90` = "mean")) %>%
+    mutate(statistic = recode(statistic, `90` = "mean")) %>%
     pivot_wider(names_from = variable, values_from = value)
   
   # Score
