@@ -22,7 +22,8 @@ for(v in version){
                  names_pattern = "(.*)_(.*)",
                  values_to = 'value') %>%
     mutate(statistic = recode(statistic, `90` = "mean")) %>%
-    pivot_wider(names_from = variable, values_from = value)
+    pivot_wider(names_from = variable, values_from = value) %>%
+    rename(gcc_90 = gcc, rcc_90 = rcc)
   
   # Score
   # scores <- score(preds, theme = "phenology")
