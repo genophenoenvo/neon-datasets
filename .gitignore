@@ -1,5 +1,5 @@
 # Suppress the following from GitHub
-
+*.pdf
 *.jpg
 *.Rdata
 
