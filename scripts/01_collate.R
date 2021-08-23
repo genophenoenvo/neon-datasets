@@ -92,7 +92,7 @@ for(i in 1:length(all)){
   bud <- unique(vars[which(vars %in% c("Flush", "break", "burst", "Set"))]) # which phenophase; can match up "break" later
   year <- if(length(grep("^\\d{4}$", vars)) > 0) {
     as.numeric(grep("^\\d{4}$", vars, value = TRUE))
-    } else {NA} # exact match of 4 digit year code
+    } else {2021} # exact match of 4 digit year code
   rep <- if(length(grep("rep", vars, ignore.case = TRUE)) > 0) {
     readr::parse_number(grep("rep", vars, ignore.case = TRUE, value = TRUE))
     } else {NA} # rep number regardless of case
@@ -100,7 +100,8 @@ for(i in 1:length(all)){
     readr::parse_number(grep("score\\d{1}$", vars, value = TRUE))
     } else if(length(grep("^\\d{1}$", vars)) > 0) {
     as.numeric(grep("^\\d{1}$", vars, value = TRUE))
-    } else {NA}
+    } else if(length(grep("^\\d{1,2}-\\d{1,2}", vars)) > 0) {
+    NA} else {1}
   date <- if(length(grep("^\\d{1,2}-\\d{1,2}", vars)) > 0) {
     as.Date(paste0(year, "-", grep("^\\d{1,2}-\\d{1,2}", vars, value = TRUE)))
     } else {NA}
@@ -127,7 +128,7 @@ for(i in 1:length(all)){
     filter(cultivar_id %in% dups) %>%
     count(cultivar_id) %>%
     mutate(site = site,
-           budPhase = ifelse(bud %in% c("break", "burst"), "Flush", bud), # categorizes break and burst as Flush
+           budPhase = ifelse(bud %in% c("break"), "Flush", bud), # categorizes break as Flush, burst is not
            year = year,
            date = date,
            rep = rep,
