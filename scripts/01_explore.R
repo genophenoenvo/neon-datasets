@@ -151,6 +151,7 @@ table(all_df$budPhase)
 
 table(all_df$site, all_df$year)
 
+save(all_df, file = "../cleanData/all_df.Rdata")
 
 ### Summarize dataset availability by site-year-phenophase
 files_sum <- files_df %>%
@@ -159,7 +160,7 @@ files_sum <- files_df %>%
 
 # All 3 sites have 3 sampling points for 2010 bud set, 
 # 1-2 sampling points for 2010 bud flush
-# 1-2 sampoign points for 2013 bud flush
+# 1-2 sampling points for 2013 bud flush
 
 # Starting with 2010 bud set at Placerville site (has dates), 
 # see if level 3.5 can be estimated with any confidence across reps/blocks
@@ -176,16 +177,19 @@ foo <- pl_2010_set %>%
 cults <- foo$cultivar_id[which(foo$n >= 9)]
 
 length(cults) # 474, divisible by 6 and 79
-for(i in 1:6){
-  pdf(paste0("../plots/01_explore/Pl_2010_Set_", i, ".pdf"),
-      height = 10, width = 10)
-  pl_2010_set %>% 
+for(i in 1:6) {
+  fig <- pl_2010_set %>% 
     filter(cultivar_id %in% cults[(i*79-78):(i*79)] & phenophase %in% 1:6) %>%
     ggplot(aes(x = date, y = phenophase, color = as.factor(rep))) +
     geom_jitter(height = 0.1, width = 0) +
     scale_y_discrete(limits = factor(1:6)) +
     scale_x_date(date_breaks = "2 weeks", date_labels = "%m/%d") +
     facet_wrap(~cultivar_id)
+  jpeg(paste0("../plots/01_explore/Pl_2010_Set_", i, ".jpg"),
+      height = 10, width = 10, units = "in", res = 600)
+  print(fig)
   dev.off()
 }
+
+
 
