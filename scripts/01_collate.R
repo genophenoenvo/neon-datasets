@@ -13,20 +13,24 @@ ucd <- grep("UCDavis", all, value = TRUE)
 n <- length(all)
 all_txt <- list()
 dim_df <- data.frame(name = character(n), rows = numeric(n), cols = numeric(n), uniqueIDs = numeric(n),
-                     bin1 = numeric(n), bin2 = numeric(n),  bin3 = numeric(n), 
-                     bin4 = numeric(n),  bin5 = numeric(n), bin6 = numeric(n))
+                     bin0 = numeric(n), bin1 = numeric(n), bin2 = numeric(n),  bin3 = numeric(n), 
+                     bin4 = numeric(n),  bin5 = numeric(n), bin6 = numeric(n),
+                     bin7 = numeric(n), binNA = numeric(n))
 for(i in 1:length(all)){
   all_txt[[i]] <- read.table(file = paste0("../rawData/phenophases/", all[i]))
   dim_df$name[i] <- all[i]
   dim_df[i, 2:ncol(dim_df)] <- c(nrow(all_txt[[i]]), 
                                  ncol(all_txt[[i]]),
                                  length(unique(all_txt[[i]][,1])),
+                                 length(which(all_txt[[i]][,2] == 0)),
                                  length(which(all_txt[[i]][,2] == 1)),
                                  length(which(all_txt[[i]][,2] == 2)),
                                  length(which(all_txt[[i]][,2] == 3)),
                                  length(which(all_txt[[i]][,2] == 4)),
                                  length(which(all_txt[[i]][,2] == 5)),
-                                 length(which(all_txt[[i]][,2] == 6)))
+                                 length(which(all_txt[[i]][,2] == 6)),
+                                 length(which(all_txt[[i]][,2] == 7)),
+                                 sum(is.na(all_txt[[i]][,2])))
                    
 }
 str(dim_df)
