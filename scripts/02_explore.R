@@ -20,6 +20,11 @@ all  <- all_df %>%
                            site == "Placerville" & date == as.Date("2013-04-12") ~ 2
                            ), score))
 
+# Summarize vy site, year, phase
+sum_all <- all %>%
+  group_by(site, year, budPhase) %>%
+  summarize(rep_n = length(unique(score)))
+
 # Summarize by site, year, phase, cultivar_id, replicate
 
 sum_df <- all %>%
