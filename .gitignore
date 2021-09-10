@@ -5,6 +5,7 @@
 *.Rproj
 
 #Ignore csv files in the inputs folder
+models/simple/*.csv
 models/RFR/inputs_gcc/*.csv
 models/RFR/inputs_weather/*.csv
 models/RFR/PEG_RFR/**/*.csv
