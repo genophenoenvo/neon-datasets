@@ -192,7 +192,7 @@ Summary figures and stats:
 
 **Locations**
 
--   13 sites with 17 total transects
+-   13 sites with 18 total transects
 -   From 1 to 2 transects per site
 -   Map of transect locations:
 
@@ -210,13 +210,13 @@ Summary figures and stats:
 
 | Species                         | Occurrences |
 |:--------------------------------|------------:|
-| Acer rubrum L.                  |         109 |
-| Lonicera maackii (Rupr.) Herder |          88 |
-| Juglans nigra L.                |          85 |
+| Acer rubrum L.                  |         110 |
+| Lonicera maackii (Rupr.) Herder |          89 |
+| Juglans nigra L.                |          81 |
 | Larrea tridentata (DC.) Coville |          67 |
 | Lindera benzoin (L.) Blume      |          65 |
 | Prosopis velutina Woot.         |          58 |
-| Acer rubrum L. var. rubrum      |          43 |
+| Acer rubrum L. var. rubrum      |          45 |
 | Glycine max (L.) Merr.          |           7 |
 | Zea mays L.                     |           6 |
 
@@ -224,12 +224,12 @@ Summary figures and stats:
 
 | Species                         | Individuals |
 |:--------------------------------|------------:|
-| Acer rubrum L.                  |          66 |
+| Acer rubrum L.                  |          67 |
 | Lindera benzoin (L.) Blume      |          36 |
 | Lonicera maackii (Rupr.) Herder |          34 |
-| Juglans nigra L.                |          32 |
+| Juglans nigra L.                |          31 |
 | Larrea tridentata (DC.) Coville |          31 |
-| Acer rubrum L. var. rubrum      |          28 |
+| Acer rubrum L. var. rubrum      |          29 |
 | Prosopis velutina Woot.         |          25 |
 | Glycine max (L.) Merr.          |           7 |
 | Zea mays L.                     |           6 |
@@ -240,7 +240,7 @@ Summary figures and stats:
 
 **Time**
 
--   Records taken on 140 days from 2014-04-16 to 2020-06-17
+-   Records taken on 141 days from 2014-04-16 to 2020-07-22
 -   Plot of number of records per day across entire time range:
 
 ![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
@@ -336,52 +336,3 @@ Summary figures and stats:
 **Data availability across time**
 
 ![](README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
-
-### 4. Mammal diversity
-
-#### Original data
-
--   **Small mammal box trapping** dataset
--   Product ID *DP1.10072.001*
--   [Data portal
-    link](https://data.neonscience.org/data-products/DP1.10072.001)
--   Summary: For all sites starting in 2016, individual small mammals
-    were trapped and identified 4-6 times per year.
-
-### 5. Bird diversity
-
-#### Original data
-
--   **Breeding landbird point counts** dataset
--   Product ID *DP1.10003.001*
--   [Data portal
-    link](https://data.neonscience.org/data-products/DP1.10003.001)
--   Summary: Species identifications of individual non-large and
-    non-aquatic birds from a point. Each site has 5-10 grids with 9
-    points per grid (45-90 points), with counts occurring once or twice
-    a year since 2017 for most sites.
-
-### 6. Mosquito diversity
-
-#### Original data
-
--   **Mosquitoes sampled from CO2 traps** dataset
--   Product ID *DP1.10043.001*
--   [Data portal
-    link](https://data.neonscience.org/data-products/DP1.10043.001)
--   Summary: All sites were sampled, starting in 2016 for some, once to
-    twice a week at 10 plots per site (note: sampling design changed
-    somewhat in 2018). Subsamples from traps were identified to taxon
-    and includes abundance numbers.
-
-### 7. Beetle diversity
-
-#### Original data
-
--   **Ground beetles sampled from pitfall traps** dataset
--   Product ID *DP1.10022.001*
--   [Data portal
-    link](https://data.neonscience.org/data-products/DP1.10022.001)
--   Summary: All sites were sampled, starting in 2016 for most, twice a
-    week at 10 plots per site. Individuals from traps were identified to
-    species.
