@@ -7,6 +7,9 @@ README.
 
 ### 1. Plant cover
 
+The final curated dataset contains plant cover values by species at all
+NEON sites.
+
 #### Original data
 
 -   **Plant presence and percent cover** dataset
@@ -98,6 +101,11 @@ Summary figures and stats:
 ![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ### 2. Phenology measurements
+
+The final curated dataset contains first date for each individual of at
+least half of flowers open for species from an NPN list at all NEON
+sites, combined with the corresponding NEON-collected meteorological
+data.
 
 #### Original data
 
@@ -246,6 +254,10 @@ Summary figures and stats:
 ![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ### 3. Phenology images
+
+The final curated dataset contains green chromatic coordinate values,
+which came from images of sites, for a subset of NEON sites, combined
+with meteorological data from Daymet.
 
 #### Original data
 
